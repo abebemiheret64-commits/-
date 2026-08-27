@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ቤላ ጤና ጣቢያ - IT Service Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=Noto+Sans+Ethiopic:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Noto Sans Ethiopic', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 10px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* LAPTOP CONTAINER STYLES */
+        .laptop-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* LAPTOP SCREEN FRAME */
+        .laptop-screen {
+            background: #090d16;
+            border: 14px solid #1e293b;
+            border-top-width: 18px;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            padding: 2px;
+        }
+
+        /* WEBCAM DOT */
+        .laptop-screen::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #334155;
+            border-radius: 50%;
+            box-shadow: inset 0 0 2px #000;
+        }
+
+        /* INNER DISPLAY WINDOW */
+        .display-window {
+            background: #ffffff;
+            height: 650px;
+            overflow-y: auto;
+            border-radius: 4px;
+            padding: 25px;
+        }
+
+        /* LAPTOP BASE / KEYBOARD SECTION */
+        .laptop-base {
+            background: linear-gradient(to bottom, #cbd5e1 0%, #94a3b8 100%);
+            height: 24px;
+            border-radius: 0 0 15px 15px;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* NOTCH FOR OPENING LAPTOP */
+        .laptop-base::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 6px;
+            background: #64748b;
+            border-radius: 0 0 6px 6px;
+        }
+
+        /* HEADER STYLES */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #1e3a8a;
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .header p {
+            margin: 4px 0 0 0;
+            color: #64748b;
+            font-size: 13.5px;
+        }
+
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #475569;
+            font-size: 13.5px;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* FORM STYLES */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 12.5px;
+            color: #334155;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="tel"], input[type="password"], select, textarea {
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13.5px;
+            background-color: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .custom-input {
+            display: none;
+            margin-top: 8px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .priority-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .priority-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* SIGNATURE PAD STYLES */
+        .sig-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            width: 100%;
+            max-width: 320px;
+            touch-action: none;
+            margin-top: 4px;
+        }
+
+        canvas {
+            display: block;
+            border-radius: 6px;
+            cursor: crosshair;
+        }
+
+        .btn-clear-sig {
+            background-color: #64748b;
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(90deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14.5px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35);
+        }
+
+        /* LOGIN BOX STYLES */
+        .login-box {
+            max-width: 360px;
+            margin: 50px auto;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: #f8fafc;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center;
+        }
+
+        /* DASHBOARD & REPORT STYLES */
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: 700;
+        }
+
+        .badge {
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .badge-high { background: #fee2e2; color: #991b1b; }
+        .badge-med { background: #fef3c7; color: #92400e; }
+        .badge-low { background: #e0f2fe; color: #075985; }
+
+        .badge-pending { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        .badge-resolved { background: #dcfce7; color: #166534; }
+
+        .btn-action {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .btn-resolve { background: #16a34a; color: white; }
+        .btn-del { background: #ef4444; color: white; }
+        .btn-logout { background: #dc2626; color: white; margin-left: 10px; }
+
+        .sig-preview-img {
+            max-width: 80px;
+            max-height: 30px;
+            border-bottom: 1px solid #0f172a;
+        }
+
+        /* ALERT */
+        .alert-success {
+            display: none;
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            color: #166534;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .alert-error {
+            color: #dc2626;
+            font-size: 12.5px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="laptop-wrapper">
+    <!-- LAPTOP SCREEN FRAME -->
+    <div class="laptop-screen">
+        <div class="display-window">
+            
+            <div class="header">
+                <h2>🏥 ቤላ ጤና ጣቢያ - የ IT እገዛ ጥያቄ ማቅረቢያ (Service Desk)</h2>
+                <p>የኮምፒውተር፣ የኔትወርክ፣ የ EMR ወይም የፕሪንተር ችግር ሲያጋጥምዎት እዚህ ጥያቄዎን ያቅርቡ</p>
+            </div>
+
+            <!-- TABS -->
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('requestFormTab', this)">📝 አዲስ የጥያቄ ማቅረቢያ</button>
+                <button class="tab-btn" onclick="switchTab('adminDashboardTab', this)">🛠️ የ IT ክፍል</button>
+            </div>
+
+            <!-- TAB 1: USER REQUEST FORM -->
+            <div id="requestFormTab" class="tab-content active">
+                
+                <div class="alert-success" id="successMsg">
+                    <h4 style="margin:0 0 4px 0;">✨ ጥያቄዎ ከነፊርማዎ በተሳካ ሁኔታ ደርሶናል! ✨</h4>
+                    <p style="margin:0;">የ IT ባለሙያዎቻችን በቅርብ ጊዜ ውስጥ መጥተው እገዛ ያደርጉልዎታል።</p>
+                </div>
+
+                <form id="ticketForm" onsubmit="submitTicket(event)">
+                    <div class="form-grid">
+                        <!-- 1. NAME -->
+                        <div class="field">
+                            <label>የጠያቂው ስም: *</label>
+                            <input type="text" id="reqName" placeholder="ሙሉ ስም ያስገቡ" required>
+                        </div>
+
+                        <!-- 2. DEPARTMENT WITH CUSTOM INPUT -->
+                        <div class="field">
+                            <label>ዲፓርትመንት / የስራ ክፍል: *</label>
+                            <select id="reqDept" onchange="toggleCustomDeptInput()" required>
+                                <option value="">-- ክፍል ይምረጡ --</option>
+                                <option value="ፋይናንስ ክፍል">ፋይናንስ ክፍል</option>
+                                <option value="የተመላላሽ ህክምና (OPD)">የተመላላሽ ህክምና (OPD)</option>
+                                <option value="ፋርማሲ ክፍል">ፋርማሲ ክፍል</option>
+                                <option value="ድንገተኛ ህክምና (Emergency)">ድንገተኛ ህክምና (Emergency)</option>
+                                <option value="ላብራቶሪ">ላብራቶሪ</option>
+                                <option value="ማተርኒቲ / ካርድ ክፍል">ማተርኒቲ / ካርድ ክፍል</option>
+                                <option value="አስተዳደር / HR">አስተዳደር / HR</option>
+                                <option value="ሌላ">ሌላ (ከዝርዝሩ ውጭ)...</option>
+                            </select>
+                            <input type="text" id="customDeptInput" class="custom-input" placeholder="እባክዎን የክፍልዎን ስም ይፃፉ...">
+                        </div>
+
+                        <!-- 3. PHONE -->
+                        <div class="field">
+                            <label>የስልክ ቁጥር / የውስጥ መስመር:</label>
+                            <input type="tel" id="reqPhone" placeholder="ምሳሌ፡ 0911... ወይም Ext.">
+                        </div>
+
+                        <!-- 4. CATEGORY WITH CUSTOM INPUT -->
+                        <div class="field">
+                            <label>የችግሩ አይነት: *</label>
+                            <select id="issueCategory" onchange="toggleCustomCategoryInput()" required>
+                                <option value="">-- የችግሩን አይነት ይምረጡ --</option>
+                                <option value="EMR / ሲስተም">የ EMR / የሲስተም ችግር</option>
+                                <option value="ኔትወርክ / ኢንተርኔት">የ ኔትወርክ / የኢንተርኔት መቋረጥ</option>
+                                <option value="ፕሪንተር / ስካነር">የ ፕሪንተር / የስካነር ብልሽት</option>
+                                <option value="ኮምፒውተር / ሃርድዌር">የ ኮምፒውተር / ሃርድዌር ችግር</option>
+                                <option value="CCTV ካሜራ">የ CCTV ካሜራ ችግር</option>
+                                <option value="ፓስዎርድ / አካውንት">የ ፓስዎርድ / የአካውንት መቆለፍ</option>
+                                <option value="ሌላ ጥያቄ">ሌላ ጥያቄ (ከዝርዝሩ ውጭ)...</option>
+                            </select>
+                            <input type="text" id="customCategoryInput" class="custom-input" placeholder="እባክዎን የችግሩን አይነት በአጭሩ ይፃፉ...">
+                        </div>
+                    </div>
+
+                    <!-- PRIORITY -->
+                    <div class="field" style="margin-bottom: 15px;">
+                        <label>የችግሩ አጣዳፊነት ደረጃ: *</label>
+                        <div class="priority-group">
+                            <label class="priority-option" style="color: #991b1b;">
+                                <input type="radio" name="priority" value="ከፍተኛ" required> 🔴 ከፍተኛ (ስራ ሙሉ በሙሉ ያስቆመ)
+                            </label>
+                            <label class="priority-option" style="color: #92400e;">
+                                <input type="radio" name="priority" value="መካከለኛ" checked> 🟡 መካከለኛ (ስራ የሚያስተጉል)
+                            </label>
+                            <label class="priority-option" style="color: #075985;">
+                                <input type="radio" name="priority" value="ዝቅተኛ"> 🔵 ዝቅተኛ (መደበኛ ጥያቄ/ስልጠና)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ISSUE DETAILS -->
+                    <div class="field" style="margin-bottom: 15px;">
+                        <label>የችግሩ ዝርዝር መግለጫ: *</label>
+                        <textarea id="issueDetails" rows="3" placeholder="ያጋጠመዎትን ችግር ወይም ስክሪኑ ላይ የሚታየውን Error ዝርዝር እዚህ ይፃፉ..." required></textarea>
+                    </div>
+
+                    <!-- DIGITAL SIGNATURE AREA -->
+                    <div class="field" style="margin-bottom: 15px;">
+                        <label>የጠያቂው/የባለሙያው ፊርማ: *</label>
+                        <div class="sig-container">
+                            <canvas id="userSigCanvas" width="315" height="100"></canvas>
+                        </div>
+                        <div>
+                            <button type="button" class="btn-clear-sig" onclick="clearUserSig()">ፊርማውን አጽዳ</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">📩 ጥያቄውን ላክ (Submit Request)</button>
+                </form>
+            </div>
+
+            <!-- TAB 2: IT ADMIN DASHBOARD -->
+            <div id="adminDashboardTab" class="tab-content">
+                
+                <!-- LOGIN SECTION -->
+                <div id="loginSection" class="login-box">
+                    <h3 style="color: #1e3a8a; margin-top:0;">🔒 የ IT ክፍል መግቢያ</h3>
+                    <p style="font-size: 12.5px; color: #64748b;">እባክዎን ለመግባት የተጠቃሚ ስም እና ፓስወርድ ያስገቡ</p>
+                    
+                    <div class="field" style="margin-bottom: 10px; text-align: left;">
+                        <label>Username:</label>
+                        <input type="text" id="loginUser" placeholder="የተጠቃሚ ስም">
+                    </div>
+                    <div class="field" style="margin-bottom: 12px; text-align: left;">
+                        <label>Password:</label>
+                        <input type="password" id="loginPass" placeholder="የይለፍ ቃል">
+                    </div>
+                    
+                    <button class="btn-submit" style="padding: 10px; margin-top:0;" onclick="handleLogin()">ግልፅ/ይግቡ (Login)</button>
+                    <div id="loginError" class="alert-error">የተሳሳተ የተጠቃሚ ስም ወይም ፓስወርድ!</div>
+                </div>
+
+                <!-- DASHBOARD SECTION (AUTHENTICATED) -->
+                <div id="dashboardSection" style="display: none;">
+                    
+                    <div class="filter-container">
+                        <div>
+                            <h3 style="margin: 0; color: #1e3a8a; font-size:16px;">📋 የተላኩ የ IT እገዛ ጥያቄዎች እና ሪፖርት</h3>
+                        </div>
+                        <div>
+                            <button class="btn-action btn-del" onclick="clearAllTickets()">ሁሉንም አፅዳ</button>
+                            <button class="btn-action btn-logout" onclick="handleLogout()">ውጣ (Logout)</button>
+                        </div>
+                    </div>
+
+                    <!-- REPORT FILTER TABS -->
+                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px; background: #fff; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                        <label style="margin:0; font-size:13px; color:#1e3a8a;">📊 ሪፖርት ማጣሪያ (Filter Report):</label>
+                        <select id="reportFilter" onchange="renderTicketsTable()" style="padding: 5px 10px; width: auto; font-size:12.5px;">
+                            <option value="all">ሁሉንም አሳይ (All)</option>
+                            <option value="daily">የዛሬ ብቻ (Daily Report)</option>
+                            <option value="weekly">የዚህ ሳምንት (Weekly Report)</option>
+                            <option value="monthly">የዚህ ወር (Monthly Report)</option>
+                        </select>
+                        <span id="ticketCountBadge" style="font-size: 12px; font-weight: 700; color: #475569;"></span>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ተ.ቁ</th>
+                                <th>ቀን & ሰዓት</th>
+                                <th>የጠያቂ ስም & ክፍል</th>
+                                <th>የችግሩ አይነት</th>
+                                <th>መግለጫ</th>
+                                <th>አጣዳፊነት</th>
+                                <th>ፊርማ</th>
+                                <th>ሁኔታ</th>
+                                <th>ድርጊት</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- LAPTOP BASE / KEYBOARD BOTTOM -->
+    <div class="laptop-base"></div>
+</div>
+
+<script>
+    let ticketsDB = JSON.parse(localStorage.getItem('it_service_tickets')) || [];
+    let isLoggedIn = false;
+    let isSigDrawn = false;
+
+    // CANVAS DRAWING SETUP FOR USER SIGNATURE
+    const canvas = document.getElementById('userSigCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing);
+
+    function startDrawing(e) {
+        isDrawing = true;
+        isSigDrawn = true;
+        ctx.beginPath();
+        const rect = canvas.getBoundingClientRect();
+        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
+    }
+
+    function handleTouchStart(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        isDrawing = true;
+        isSigDrawn = true;
+        ctx.beginPath();
+        ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+
+    function handleTouchMove(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        ctx.stroke();
+    }
+
+    function stopDrawing() { isDrawing = false; }
+
+    function clearUserSig() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        isSigDrawn = false;
+    }
+
+    // DYNAMIC INPUT TOGGLES
+    function toggleCustomDeptInput() {
+        const select = document.getElementById('reqDept');
+        const customInput = document.getElementById('customDeptInput');
+        if (select.value === 'ሌላ') {
+            customInput.style.display = 'block';
+            customInput.required = true;
+        } else {
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = '';
+        }
+    }
+
+    function toggleCustomCategoryInput() {
+        const select = document.getElementById('issueCategory');
+        const customInput = document.getElementById('customCategoryInput');
+        if (select.value === 'ሌላ ጥያቄ') {
+            customInput.style.display = 'block';
+            customInput.required = true;
+        } else {
+            customInput.style.display = 'none';
+            customInput.required = false;
+            customInput.value = '';
+        }
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+
+        if (tabId === 'adminDashboardTab' && isLoggedIn) {
+            renderTicketsTable();
+        }
+    }
+
+    // LOGIN & AUTHENTICATION HANDLERS
+    function handleLogin() {
+        const u = document.getElementById('loginUser').value.trim();
+        const p = document.getElementById('loginPass').value.trim();
+
+        if (u === 'IT' && p === '12345') {
+            isLoggedIn = true;
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            renderTicketsTable();
+        } else {
+            document.getElementById('loginError').style.display = 'block';
+        }
+    }
+
+    function handleLogout() {
+        isLoggedIn = false;
+        document.getElementById('dashboardSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'block';
+    }
+
+    // SUBMIT TICKET
+    function submitTicket(e) {
+        e.preventDefault();
+
+        if (!isSigDrawn) {
+            alert("እባክዎን ከታች ባለው ሳጥን ውስጥ ይፈርሙ!");
+            return;
+        }
+
+        const name = document.getElementById('reqName').value.trim();
+        
+        const deptSelect = document.getElementById('reqDept').value;
+        const dept = deptSelect === 'ሌላ' ? document.getElementById('customDeptInput').value.trim() : deptSelect;
+
+        const phone = document.getElementById('reqPhone').value.trim() || 'አልተጠቀሰም';
+
+        const categorySelect = document.getElementById('issueCategory').value;
+        const category = categorySelect === 'ሌላ ጥያቄ' ? document.getElementById('customCategoryInput').value.trim() : categorySelect;
+
+        const priority = document.querySelector('input[name="priority"]:checked').value;
+        const details = document.getElementById('issueDetails').value.trim();
+        const signatureData = canvas.toDataURL();
+
+        const now = new Date();
+        const dateTimeStr = now.toLocaleDateString('am-ET') + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const newTicket = {
+            id: Date.now(),
+            timestamp: now.getTime(),
+            dateTime: dateTimeStr,
+            name,
+            dept,
+            phone,
+            category,
+            priority,
+            details,
+            signature: signatureData,
+            status: 'በመጠበቅ ላይ (Pending)'
+        };
+
+        ticketsDB.push(newTicket);
+        localStorage.setItem('it_service_tickets', JSON.stringify(ticketsDB));
+
+        // Reset
+        document.getElementById('ticketForm').reset();
+        clearUserSig();
+        toggleCustomDeptInput();
+        toggleCustomCategoryInput();
+
+        const msg = document.getElementById('successMsg');
+        msg.style.display = 'block';
+        msg.scrollIntoView({ behavior: 'smooth' });
+
+        setTimeout(() => {
+            msg.style.display = 'none';
+        }, 4000);
+    }
+
+    // RENDER TICKETS TABLE & FILTER REPORT
+    function renderTicketsTable() {
+        const tbody = document.getElementById('ticketsTableBody');
+        const filter = document.getElementById('reportFilter').value;
+        const countBadge = document.getElementById('ticketCountBadge');
+        tbody.innerHTML = '';
+
+        let filteredTickets = ticketsDB.slice().reverse();
+
+        const now = Date.now();
+        const ONE_DAY = 24 * 60 * 60 * 1000;
+        const ONE_WEEK = 7 * ONE_DAY;
+        const ONE_MONTH = 30 * ONE_DAY;
+
+        if (filter === 'daily') {
+            filteredTickets = filteredTickets.filter(t => (now - t.timestamp) <= ONE_DAY);
+        } else if (filter === 'weekly') {
+            filteredTickets = filteredTickets.filter(t => (now - t.timestamp) <= ONE_WEEK);
+        } else if (filter === 'monthly') {
+            filteredTickets = filteredTickets.filter(t => (now - t.timestamp) <= ONE_MONTH);
+        }
+
+        countBadge.innerText = `(የተገኙ ጥያቄዎች ብዛት፡ ${filteredTickets.length})`;
+
+        if (filteredTickets.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:#64748b; padding:15px;">በተመረጠው ጊዜ ውስጥ ምንም የቀረበ ጥያቄ የለም።</td></tr>';
+            return;
+        }
+
+        filteredTickets.forEach((ticket, idx) => {
+            let pBadge = `<span class="badge badge-med">${ticket.priority}</span>`;
+            if (ticket.priority === 'ከፍተኛ') pBadge = `<span class="badge badge-high">${ticket.priority}</span>`;
+            if (ticket.priority === 'ዝቅተኛ') pBadge = `<span class="badge badge-low">${ticket.priority}</span>`;
+
+            let sBadge = `<span class="badge badge-pending">${ticket.status}</span>`;
+            if (ticket.status === 'ተጠናቋል') sBadge = `<span class="badge badge-resolved">ተጠናቋል</span>`;
+
+            let sigImg = ticket.signature ? `<img src="${ticket.signature}" class="sig-preview-img" alt="Sig">` : 'የለም';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${idx + 1}</td>
+                <td><small>${ticket.dateTime}</small></td>
+                <td><b>${ticket.name}</b><br><small style="color:#64748b">${ticket.dept} (${ticket.phone})</small></td>
+                <td><b>${ticket.category}</b></td>
+                <td>${ticket.details}</td>
+                <td>${pBadge}</td>
+                <td>${sigImg}</td>
+                <td>${sBadge}</td>
+                <td>
+                    ${ticket.status !== 'ተጠናቋል' 
+                        ? `<button class="btn-action btn-resolve" onclick="resolveTicket(${ticket.id})">ተሰርቷል</button>` 
+                        : '✔️'}
+                    <button class="btn-action btn-del" onclick="deleteTicket(${ticket.id})">X</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function resolveTicket(id) {
+        const ticket = ticketsDB.find(t => t.id === id);
+        if (ticket) {
+            ticket.status = 'ተጠናቋል';
+            localStorage.setItem('it_service_tickets', JSON.stringify(ticketsDB));
+            renderTicketsTable();
+        }
+    }
+
+    function deleteTicket(id) {
+        if (confirm("እርግጠኛ ነዎት ይህንን ጥያቄ ማጥፋት ይፈልጋሉ?")) {
+            ticketsDB = ticketsDB.filter(t => t.id !== id);
+            localStorage.setItem('it_service_tickets', JSON.stringify(ticketsDB));
+            renderTicketsTable();
+        }
+    }
+
+    function clearAllTickets() {
+        if (confirm("ሁሉንም የቀረቡ ጥያቄዎች ማጥፋት ይፈልጋሉ?")) {
+            ticketsDB = [];
+            localStorage.setItem('it_service_tickets', JSON.stringify(ticketsDB));
+            renderTicketsTable();
+        }
+    }
+</script>
+
+</body>
+</html>
